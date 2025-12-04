@@ -1,0 +1,222 @@
+.character-sidebar {
+    padding: var(--spacing-md);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--glass-border);
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--color-text-primary);
+}
+
+.btn-add-small {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition-default);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(138, 43, 226, 0.3);
+}
+
+.btn-add-small:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.5);
+}
+
+/* 인라인 폼 */
+.inline-form {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background: var(--glass-bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border);
+}
+
+.inline-form form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.input-small {
+    font-size: 0.9rem;
+    padding: var(--spacing-xs);
+}
+
+.form-actions-inline {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.btn-small {
+    font-size: 0.85rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    flex: 1;
+}
+
+/* 섹션 */
+.selected-characters-section,
+.all-characters-section {
+    margin-bottom: var(--spacing-md);
+}
+
+.section-title {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.layer-hint {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-weight: 400;
+}
+
+/* 선택된 캐릭터 아이템 (드래그 가능) */
+.selected-character-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.selected-character-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(255, 20, 147, 0.05));
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    cursor: grab;
+    transition: all var(--transition-default);
+}
+
+.selected-character-item:active {
+    cursor: grabbing;
+}
+
+.selected-character-item.drag-over {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+}
+
+.layer-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+/* 캐릭터 아이템 */
+.character-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.character-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-default);
+}
+
+.character-item:hover {
+    background: rgba(138, 43, 226, 0.1);
+    border-color: var(--color-primary);
+    transform: translateX(4px);
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+}
+
+.item-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+}
+
+.item-height {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.btn-delete,
+.btn-delete-mini {
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    border-radius: 50%;
+    color: #ff3b30;
+    cursor: pointer;
+    transition: all var(--transition-default);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.btn-delete {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+}
+
+.btn-delete-mini {
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.btn-delete:hover,
+.btn-delete-mini:hover {
+    background: #ff3b30;
+    color: white;
+    transform: scale(1.15) rotate(90deg);
+}
+
+@media (max-width: 768px) {
+    .character-sidebar {
+        max-height: 70vh;
+    }
+}
