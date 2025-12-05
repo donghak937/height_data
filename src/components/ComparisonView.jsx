@@ -65,6 +65,10 @@ export default function ComparisonView({ selectedCharacters, onRemoveCharacter, 
         document.removeEventListener('mouseup', onMouseUp);
     };
 
+    const [showHeight, setShowHeight] = useState(true);
+    const [showName, setShowName] = useState(true);
+    const [showSchool, setShowSchool] = useState(true);
+
     if (selectedCharacters.length === 0) {
         return (
             <div className="comparison-empty">
@@ -84,6 +88,17 @@ export default function ComparisonView({ selectedCharacters, onRemoveCharacter, 
         <div className="comparison-view glass-card">
             <div className="comparison-header">
                 <h2>키 비교</h2>
+                <div className="toggle-group">
+                    <button className={`toggle-btn ${showHeight ? 'active' : ''}`} onClick={() => setShowHeight(!showHeight)}>
+                        키 {showHeight ? 'ON' : 'OFF'}
+                    </button>
+                    <button className={`toggle-btn ${showName ? 'active' : ''}`} onClick={() => setShowName(!showName)}>
+                        이름 {showName ? 'ON' : 'OFF'}
+                    </button>
+                    <button className={`toggle-btn ${showSchool ? 'active' : ''}`} onClick={() => setShowSchool(!showSchool)}>
+                        학교 {showSchool ? 'ON' : 'OFF'}
+                    </button>
+                </div>
                 <p className="comparison-subtitle">캐릭터를 드래그해서 위치를 조정하세요</p>
             </div>
 
@@ -103,7 +118,7 @@ export default function ComparisonView({ selectedCharacters, onRemoveCharacter, 
                     const heightRatio = char.height / referenceHeight;
                     // 여캐 이미지가 남캐보다 머리 위 빈공간이 많아서 키 보정 필요
                     const isFemale = char.gender === 'female';
-                    const heightCorrection = isFemale ? 1.07 : 1; // 5% 키움
+                    const heightCorrection = isFemale ? 1.07 : 1; // 7% 키움
                     const pixelHeight = basePixelHeight * heightRatio * heightCorrection;
                     const pos = getPosition(char.id, index);
 
@@ -113,37 +128,12 @@ export default function ComparisonView({ selectedCharacters, onRemoveCharacter, 
                             className="character-draggable"
                             style={{
                                 left: pos.x,
-                                bottom: pos.y + 60,
+                                bottom: pos.y + 90,
                                 height: pixelHeight,
                                 zIndex: index + 1
                             }}
                             onMouseDown={(e) => onMouseDown(e, char.id, index)}
                         >
-                            {/* 삭제 버튼 */}
-                            <button
-                                className="delete-btn"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    onRemoveCharacter(char.id);
-                                }}
-                                onMouseDown={(e) => e.stopPropagation()}
-                            >
-                                ✕
-                            </button>
-
-                            {/* 색상 변경 버튼 */}
-                            <div className="color-picker-wrapper">
-                                <input
-                                    type="color"
-                                    className="color-input"
-                                    value={char.color || '#ff0000'}
-                                    onChange={(e) => onUpdateCharacter(char.id, { color: e.target.value })}
-                                    onClick={(e) => e.stopPropagation()}
-                                    onMouseDown={(e) => e.stopPropagation()}
-                                />
-                                <div className="color-icon" style={{ backgroundColor: char.color || `hsl(${char.hue || 0}, 70%, 50%)` }}></div>
-                            </div>
-
                             {/* 캐릭터 실루엣 (CSS Mask 사용) */}
                             <div
                                 className={`char-silhouette ${isFemale ? 'female' : 'male'}`}
@@ -155,15 +145,14 @@ export default function ComparisonView({ selectedCharacters, onRemoveCharacter, 
                                 }}
                             />
 
-                            {/* 키 표시 */}
-                            <div className="height-label">{char.height}cm</div>
-
-
-                            {/* 이름 표시 */}
-                            <div className="name-label">{char.name}</div>
-
-                            {/* 소속 표시 */}
-                            {char.school && <div className="school-label">{char.school}</div>}
+                            {/* 통합 정보 말풍선 */}
+                            {(showHeight || showName || (showSchool && char.school)) && (
+                                <div className="info-bubble">
+                                    {showHeight && <div className="info-height">{char.height}cm</div>}
+                                    {showName && <div className="info-name">{char.name}</div>}
+                                    {showSchool && char.school && <div className="info-school">{char.school}</div>}
+                                </div>
+                            )}
                         </div>
                     );
                 })}

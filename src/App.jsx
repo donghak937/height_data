@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar';
 import CharacterSidebar from './components/CharacterSidebar';
 import ComparisonView from './components/ComparisonView';
 import { filterCharacters } from './utils/koreanSearch';
-import { loadCharacters, addCharacter, deleteCharacter } from './data/sampleCharacters';
+import { loadCharacters, addCharacter, deleteCharacter, editCharacter } from './data/sampleCharacters';
 
 function App() {
     const [characters, setCharacters] = useState([]);
@@ -53,6 +53,11 @@ function App() {
     };
 
     const handleUpdateCharacter = (id, updates) => {
+        // 영구 저장소 및 전체 목록 업데이트
+        const updatedList = editCharacter(id, updates);
+        setCharacters(updatedList);
+
+        // 선택된 목록 업데이트
         setSelectedCharacters(selectedCharacters.map(char =>
             char.id === id ? { ...char, ...updates } : char
         ));
@@ -79,6 +84,7 @@ function App() {
                             onDeleteCharacter={handleDeleteCharacter}
                             onSelectCharacter={handleCharacterSelect}
                             onReorderCharacters={handleReorderCharacters}
+                            onUpdateCharacter={handleUpdateCharacter}
                         />
                     </aside>
 
