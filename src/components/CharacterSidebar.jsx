@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './CharacterSidebar.css';
+import { resetData } from '../data/firebaseUtils';
 
 export default function CharacterSidebar({
     characters,
@@ -187,6 +188,22 @@ export default function CharacterSidebar({
                         </div>
                     );
                 })}
+            </div>
+
+            <div className="sidebar-footer" style={{ marginTop: '20px', textAlign: 'center', paddingBottom: '20px' }}>
+                <button
+                    onClick={resetData}
+                    style={{
+                        fontSize: '0.8rem',
+                        color: '#999',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        textDecoration: 'underline'
+                    }}
+                >
+                    데이터 초기화 (중복 해결용)
+                </button>
             </div>
         </div>
     );
