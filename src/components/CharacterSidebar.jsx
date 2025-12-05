@@ -182,7 +182,7 @@ export default function CharacterSidebar({
                             </div>
                             <div className="item-btns">
                                 <button className="edit-btn" onClick={(e) => handleEditStart(e, char)}>✎</button>
-                                <button className="del-btn" onClick={(e) => { e.stopPropagation(); if (confirm(`${char.name} 삭제?`)) onDeleteCharacter(char.id); }}>✕</button>
+                                <button className="del-btn" onClick={(e) => { e.stopPropagation(); onDeleteCharacter(char.id); }}>✕</button>
                             </div>
                         </div>
                     );
