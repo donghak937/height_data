@@ -1,77 +1,69 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './ComparisonView.css';
 
-const SNAP_THRESHOLD = 20; // 바닥에 스냅되는 거리
-
-export default function ComparisonView({ selectedCharacters, onRemoveCharacter, onReorderCharacters }) {
-    const [draggedCharacter, setDraggedCharacter] = useState(null);
+export default function ComparisonView({ selectedCharacters, onRemoveCharacter, onUpdateCharacter }) {
     const [positions, setPositions] = useState({});
     const containerRef = useRef(null);
+    const dragInfo = useRef(null);
 
-    useEffect(() => {
-        // 새 캐릭터가 추가되면 기본 위치 설정 (바닥에 붙임)
-        const newPositions = { ...positions };
-        selectedCharacters.forEach((char, index) => {
-            if (!newPositions[char.id]) {
-                newPositions[char.id] = {
-                    x: index * 120 + 50,
-                    y: 0 // 바닥에서 시작
-                };
-            }
-        });
-        setPositions(newPositions);
-    }, [selectedCharacters]);
-
-    const handleMouseDown = (e, character) => {
-        if (e.button !== 0) return;
-        e.preventDefault();
-
-        const rect = e.currentTarget.getBoundingClientRect();
-        const containerRect = containerRef.current.getBoundingClientRect();
-
-        setDraggedCharacter({
-            id: character.id,
-            offsetX: e.clientX - rect.left,
-            offsetY: e.clientY - rect.bottom
-        });
+    // 초기 위치 설정
+    const getPosition = (charId, index) => {
+        if (positions[charId]) return positions[charId];
+        return { x: index * 130 + 50, y: 0 };
     };
 
-    const handleMouseMove = (e) => {
-        if (!draggedCharacter || !containerRef.current) return;
+    const onMouseDown = (e, charId, index) => {
+        e.preventDefault();
 
-        const containerRect = containerRef.current.getBoundingClientRect();
-        let x = e.clientX - containerRect.left - draggedCharacter.offsetX;
-        let y = containerRect.bottom - e.clientY - draggedCharacter.offsetY;
+        const container = containerRef.current;
+        if (!container) return;
 
-        // 바닥에 가까우면 스냅
-        if (Math.abs(y) < SNAP_THRESHOLD) {
-            y = 0;
+        // 초기 위치가 없으면 계산된 위치 사용
+        const pos = positions[charId] || getPosition(charId, index);
+
+        dragInfo.current = {
+            id: charId,
+            startMouseX: e.clientX,
+            startMouseY: e.clientY,
+            startPosX: pos.x,
+            startPosY: pos.y
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    };
+
+    const onMouseMove = (e) => {
+        if (!dragInfo.current) return;
+
+        const { id, startMouseX, startMouseY, startPosX, startPosY } = dragInfo.current;
+
+        const dx = e.clientX - startMouseX;
+        const dy = startMouseY - e.clientY; // Y는 반대
+
+        let newX = startPosX + dx;
+        let newY = startPosY + dy;
+
+        // 바닥 스냅 (20px 이내면 0으로)
+        if (newY < 20 && newY > -20) {
+            newY = 0;
         }
 
-        // 경계 제한
-        x = Math.max(0, Math.min(x, containerRect.width - 100));
-        y = Math.max(0, y);
+        // 경계
+        newX = Math.max(0, newX);
+        newY = Math.max(0, newY);
 
         setPositions(prev => ({
             ...prev,
-            [draggedCharacter.id]: { x, y }
+            [id]: { x: newX, y: newY }
         }));
     };
 
-    const handleMouseUp = () => {
-        setDraggedCharacter(null);
+    const onMouseUp = () => {
+        dragInfo.current = null;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
     };
-
-    useEffect(() => {
-        if (draggedCharacter) {
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
-            return () => {
-                document.removeEventListener('mousemove', handleMouseMove);
-                document.removeEventListener('mouseup', handleMouseUp);
-            };
-        }
-    }, [draggedCharacter]);
 
     if (selectedCharacters.length === 0) {
         return (
@@ -83,86 +75,98 @@ export default function ComparisonView({ selectedCharacters, onRemoveCharacter, 
         );
     }
 
-    const maxHeight = Math.max(...selectedCharacters.map(c => c.height));
-    const basePixelHeight = 500;
-    const gridLineCount = 15;
+
+    // 고정된 기준 키 (200cm)를 사용하여 캐릭터가 추가되어도 크기가 변하지 않도록 함
+    const referenceHeight = 200;
+    const basePixelHeight = 900;
 
     return (
         <div className="comparison-view glass-card">
             <div className="comparison-header">
                 <h2>키 비교</h2>
-                <p className="comparison-subtitle">
-                    캐릭터를 드래그해서 위치를 조정하세요
-                </p>
+                <p className="comparison-subtitle">캐릭터를 드래그해서 위치를 조정하세요</p>
             </div>
 
-            <div
-                className="comparison-container"
-                ref={containerRef}
-            >
-                {/* 배경 그리드 */}
+            <div className="comparison-container" ref={containerRef}>
+                {/* 그리드 */}
                 <div className="grid-background">
-                    {Array.from({ length: gridLineCount }).map((_, i) => (
+                    {Array.from({ length: 10 }).map((_, i) => (
                         <div key={i} className="grid-line" />
                     ))}
                 </div>
 
                 {/* 바닥 빨간 라인 */}
-                <div className="floor-line"></div>
+                <div className="floor-line" />
 
-                <div className="characters-canvas">
-                    {selectedCharacters.map((character, index) => {
-                        const heightRatio = character.height / maxHeight;
-                        const pixelHeight = basePixelHeight * heightRatio;
-                        const position = positions[character.id] || { x: 0, y: 0 };
-                        const zIndex = index + 1;
+                {/* 캐릭터들 */}
+                {selectedCharacters.map((char, index) => {
+                    const heightRatio = char.height / referenceHeight;
+                    // 여캐 이미지가 남캐보다 머리 위 빈공간이 많아서 키 보정 필요
+                    const isFemale = char.gender === 'female';
+                    const heightCorrection = isFemale ? 1.12 : 1; // 12% 키움
+                    const pixelHeight = basePixelHeight * heightRatio * heightCorrection;
+                    const pos = getPosition(char.id, index);
 
-                        return (
-                            <div
-                                key={character.id}
-                                className={`comparison-character-draggable ${draggedCharacter?.id === character.id ? 'dragging' : ''}`}
-                                style={{
-                                    left: `${position.x}px`,
-                                    bottom: `${position.y}px`,
-                                    zIndex: zIndex,
-                                    height: `${pixelHeight}px`,
-                                    cursor: 'move'
+                    return (
+                        <div
+                            key={char.id}
+                            className="character-draggable"
+                            style={{
+                                left: pos.x,
+                                bottom: pos.y + 60,
+                                height: pixelHeight,
+                                zIndex: index + 1
+                            }}
+                            onMouseDown={(e) => onMouseDown(e, char.id, index)}
+                        >
+                            {/* 삭제 버튼 */}
+                            <button
+                                className="delete-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onRemoveCharacter(char.id);
                                 }}
-                                onMouseDown={(e) => handleMouseDown(e, character)}
+                                onMouseDown={(e) => e.stopPropagation()}
                             >
-                                <button
-                                    className="remove-btn-floating"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onRemoveCharacter(character.id);
-                                    }}
+                                ✕
+                            </button>
+
+                            {/* 색상 변경 버튼 */}
+                            <div className="color-picker-wrapper">
+                                <input
+                                    type="color"
+                                    className="color-input"
+                                    value={char.color || '#ff0000'}
+                                    onChange={(e) => onUpdateCharacter(char.id, { color: e.target.value })}
+                                    onClick={(e) => e.stopPropagation()}
                                     onMouseDown={(e) => e.stopPropagation()}
-                                    aria-label={`${character.name} 제거`}
-                                >
-                                    ✕
-                                </button>
-
-                                {/* 이미지 */}
-                                <img
-                                    src={character.gender === 'female' ? '/female.png' : '/male.png'}
-                                    alt={character.name}
-                                    className="character-image-draggable"
-                                    style={{
-                                        filter: `hue-rotate(${character.hue || 0}deg) saturate(${character.saturation || 1})`,
-                                        opacity: 0.85
-                                    }}
-                                    draggable={false}
                                 />
-
-                                {/* 캐릭터 정보 (하단) */}
-                                <div className="character-info-bottom">
-                                    <p className="info-name">{character.name}</p>
-                                    <p className="info-height">{character.height} cm</p>
-                                </div>
+                                <div className="color-icon" style={{ backgroundColor: char.color || `hsl(${char.hue || 0}, 70%, 50%)` }}></div>
                             </div>
-                        );
-                    })}
-                </div>
+
+                            {/* 캐릭터 실루엣 (CSS Mask 사용) */}
+                            <div
+                                className={`char-silhouette ${isFemale ? 'female' : ''}`}
+                                style={{
+                                    maskImage: `url(${isFemale ? '/female.png' : '/male.png'})`,
+                                    WebkitMaskImage: `url(${isFemale ? '/female.png' : '/male.png'})`,
+                                    backgroundColor: char.color || `hsl(${char.hue || 0}, 70%, 50%)`,
+                                    opacity: 0.85
+                                }}
+                            />
+
+                            {/* 키 표시 */}
+                            <div className="height-label">{char.height}cm</div>
+
+
+                            {/* 이름 표시 */}
+                            <div className="name-label">{char.name}</div>
+
+                            {/* 소속 표시 */}
+                            {char.school && <div className="school-label">{char.school}</div>}
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

@@ -52,6 +52,12 @@ function App() {
         setSelectedCharacters(newOrder);
     };
 
+    const handleUpdateCharacter = (id, updates) => {
+        setSelectedCharacters(selectedCharacters.map(char =>
+            char.id === id ? { ...char, ...updates } : char
+        ));
+    };
+
     return (
         <div className="app">
             <div className="app-background"></div>
@@ -82,6 +88,7 @@ function App() {
                             selectedCharacters={selectedCharacters}
                             onRemoveCharacter={handleRemoveFromComparison}
                             onReorderCharacters={handleReorderCharacters}
+                            onUpdateCharacter={handleUpdateCharacter}
                         />
                     </section>
                 </main>
