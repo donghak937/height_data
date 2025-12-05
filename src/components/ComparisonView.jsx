@@ -138,8 +138,8 @@ export default function ComparisonView({ selectedCharacters, onRemoveCharacter, 
                             <div
                                 className={`char-silhouette ${isFemale ? 'female' : 'male'}`}
                                 style={{
-                                    maskImage: `url(${isFemale ? '/female.png' : '/male.png'})`,
-                                    WebkitMaskImage: `url(${isFemale ? '/female.png' : '/male.png'})`,
+                                    maskImage: `url(${import.meta.env.BASE_URL}${isFemale ? 'female.png' : 'male.png'})`,
+                                    WebkitMaskImage: `url(${import.meta.env.BASE_URL}${isFemale ? 'female.png' : 'male.png'})`,
                                     backgroundColor: char.color || `hsl(${char.hue || 0}, 70%, 50%)`,
                                     opacity: 0.85
                                 }}

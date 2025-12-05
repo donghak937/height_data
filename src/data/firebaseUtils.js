@@ -17,20 +17,26 @@ export const subscribeCharacters = (callback) => {
 };
 
 export const initializeDataIfNeeded = async () => {
-    const colRef = collection(db, COLLECTION_NAME);
-    const snapshot = await getDocs(colRef);
-    if (snapshot.empty) {
-        console.log("DB가 비어있어 데이터를 초기화합니다...");
-        const batch = writeBatch(db);
-        // 약 20개 미만이므로 batch 하나로 충분 (limit 500)
-        sampleCharacters.forEach((char, index) => {
-            const docRef = doc(colRef);
-            // 기존 id(숫자)는 버리고, 순서 유지를 위해 index 기반 createdAt 흉내
-            const { id, ...data } = char;
-            batch.set(docRef, { ...data, createdAt: Date.now() + index });
-        });
-        await batch.commit();
-        console.log("데이터 초기화 완료!");
+    try {
+        const colRef = collection(db, COLLECTION_NAME);
+        const snapshot = await getDocs(colRef);
+        if (snapshot.empty) {
+            console.log("DB가 비어있어 데이터를 초기화합니다...");
+            const batch = writeBatch(db);
+            // 약 20개 미만이므로 batch 하나로 충분 (limit 500)
+            sampleCharacters.forEach((char, index) => {
+                const docRef = doc(colRef);
+                // 기존 id(숫자)는 버리고, 순서 유지를 위해 index 기반 createdAt 흉내
+                const { id, ...data } = char;
+                batch.set(docRef, { ...data, createdAt: Date.now() + index });
+            });
+            await batch.commit();
+            console.log("데이터 초기화 완료!");
+            alert("기본 데이터가 데이터베이스에 업로드되었습니다!");
+        }
+    } catch (error) {
+        console.error("Firebase 초기화 에러:", error);
+        alert("데이터베이스 연결 오류!\nFirebase 콘솔에서 '규칙(Rules)' 탭을 확인해주세요.\n\n에러 내용: " + error.message);
     }
 };
 
