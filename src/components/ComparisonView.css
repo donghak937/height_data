@@ -106,7 +106,11 @@
 }
 
 .char-silhouette.female {
-    transform: translateY(35px);
+    transform: translateY(25px);
+}
+
+.char-silhouette.male {
+    transform: translateY(5px);
 }
 
 .height-label {

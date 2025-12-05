@@ -103,7 +103,7 @@ export default function ComparisonView({ selectedCharacters, onRemoveCharacter, 
                     const heightRatio = char.height / referenceHeight;
                     // 여캐 이미지가 남캐보다 머리 위 빈공간이 많아서 키 보정 필요
                     const isFemale = char.gender === 'female';
-                    const heightCorrection = isFemale ? 1.12 : 1; // 12% 키움
+                    const heightCorrection = isFemale ? 1.07 : 1; // 5% 키움
                     const pixelHeight = basePixelHeight * heightRatio * heightCorrection;
                     const pos = getPosition(char.id, index);
 
@@ -146,7 +146,7 @@ export default function ComparisonView({ selectedCharacters, onRemoveCharacter, 
 
                             {/* 캐릭터 실루엣 (CSS Mask 사용) */}
                             <div
-                                className={`char-silhouette ${isFemale ? 'female' : ''}`}
+                                className={`char-silhouette ${isFemale ? 'female' : 'male'}`}
                                 style={{
                                     maskImage: `url(${isFemale ? '/female.png' : '/male.png'})`,
                                     WebkitMaskImage: `url(${isFemale ? '/female.png' : '/male.png'})`,
