@@ -1,0 +1,69 @@
+.app {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: var(--spacing-xl);
+}
+
+.app-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(ellipse at top, rgba(138, 43, 226, 0.15), transparent 50%),
+        radial-gradient(ellipse at bottom, rgba(255, 20, 147, 0.1), transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.app-header {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+.app-subtitle {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-sm);
+}
+
+/* 그리드 레이아웃 */
+.app-main-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: var(--spacing-lg);
+    align-items: start;
+}
+
+.sidebar-section {
+    position: sticky;
+    top: var(--spacing-md);
+    animation-delay: 100ms;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.comparison-section-main {
+    animation-delay: 200ms;
+    min-height: 600px;
+}
+
+@media (max-width: 968px) {
+    .app-main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar-section {
+        position: relative;
+        top: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-header {
+        padding: var(--spacing-lg) 0;
+    }
+}

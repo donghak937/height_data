@@ -1,0 +1,220 @@
+.comparison-view {
+    padding: 20px;
+    background: rgba(240, 240, 245, 0.6);
+    border-radius: 16px;
+}
+
+.comparison-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.comparison-header h2 {
+    margin: 0 0 8px 0;
+}
+
+.comparison-subtitle {
+    color: #666;
+    margin: 0;
+}
+
+.comparison-container {
+    position: relative;
+    background: linear-gradient(to bottom, #f8f8fa, #e8e8ec);
+    border-radius: 12px;
+    height: 600px;
+    overflow: hidden;
+}
+
+.grid-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 90px;
+    pointer-events: none;
+}
+
+.grid-line {
+    width: 100%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.floor-line {
+    position: absolute;
+    bottom: 90px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ff3b30;
+    box-shadow: 0 0 10px rgba(255, 59, 48, 0.5);
+}
+
+.character-draggable {
+    position: absolute;
+    user-select: none;
+}
+
+.drag-hitbox {
+    position: absolute;
+    top: 50%;
+    bottom: 0px;
+    left: 15%;
+    right: 15%;
+    cursor: grab;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+.drag-hitbox:active {
+    cursor: grabbing;
+}
+
+.delete-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ff3b30;
+    background: white;
+    color: #ff3b30;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 10;
+}
+
+.character-draggable:hover .delete-btn {
+    opacity: 1;
+}
+
+.delete-btn:hover {
+    background: #ff3b30;
+    color: white;
+    transform: scale(1.1);
+}
+
+.char-silhouette {
+    width: auto;
+    height: 100%;
+    aspect-ratio: 1 / 3;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: bottom center;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: bottom center;
+    pointer-events: none;
+    filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.char-silhouette.female {
+    transform: translateY(25px);
+}
+
+.char-silhouette.male {
+    transform: translateY(5px);
+}
+
+/* Info Bubble (Height + Name) */
+.info-bubble {
+    position: absolute;
+    bottom: -85px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    white-space: nowrap;
+    z-index: 5;
+}
+
+.info-height {
+    font-size: 16px;
+    font-weight: 800;
+    color: #333;
+    line-height: 1.2;
+}
+
+.info-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+}
+
+.info-school {
+    font-size: 11px;
+    color: #8a2be2;
+    background: rgba(138, 43, 226, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+.comparison-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: #888;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+}
+
+.comparison-empty h3 {
+    margin: 0 0 8px 0;
+    color: #666;
+}
+
+.comparison-empty p {
+    margin: 0;
+}
+
+/* 토글 버튼 그룹 */
+.toggle-group {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.toggle-btn {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #666;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.toggle-btn.active {
+    background: #8a2be2;
+    color: white;
+    border-color: #8a2be2;
+}
+
+.toggle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

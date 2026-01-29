@@ -1,0 +1,108 @@
+.character-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.character-card {
+    cursor: pointer;
+    overflow: hidden;
+    transition: all var(--transition-default);
+}
+
+.character-card:hover {
+    transform: translateY(-4px) scale(1.02);
+}
+
+.character-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.character-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.character-card:hover .character-image {
+    transform: scale(1.1);
+}
+
+.character-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-default);
+}
+
+.character-card:hover .character-overlay {
+    opacity: 0.9;
+}
+
+.add-icon {
+    font-size: 3rem;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.character-info {
+    text-align: center;
+}
+
+.character-name {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: var(--color-text-primary);
+}
+
+.character-height {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+}
+
+.no-results {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--color-text-muted);
+}
+
+.no-results-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+}
+
+.no-results p {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.no-results-hint {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+}
+
+@media (max-width: 768px) {
+    .character-list {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: var(--spacing-sm);
+    }
+}
