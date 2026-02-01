@@ -17,7 +17,7 @@ $bmpF = new-object System.Drawing.Bitmap($imgF)
 $topF = $bmpF.Height; $botF = 0;
 for ($y=0; $y -lt $bmpF.Height; $y++) {
     for ($x=0; $x -lt $bmpF.Width; $x++) {
-        if ($bmpF.GetPixel($x, $y).A -gt 10) {
+        if ($bmpF.GetPixel($x, $y).A -gt 10) { 
             if ($y -lt $topF) { $topF = $y }
             if ($y -gt $botF) { $botF = $y }
         }
