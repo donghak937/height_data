@@ -8,7 +8,7 @@ for ($y = 0; $y -lt $bmpM.Height; $y++) {
             if ($y -lt $topM) { $topM = $y }
             if ($y -gt $botM) { $botM = $y }
         }
-    }
+    } 
 } 
 Write-Host "MALE: Top=$topM Bot=$botM Height=$($bmpM.Height)"
 
