@@ -22,6 +22,6 @@ for ($y = 0; $y -lt $bmpF.Height; $y++) {
             if ($y -gt $botF) { $botF = $y } 
         }  
     }  
-} 
+}  
 Write-Host "FEMALE: Top=$topF Bot=$botF Height=$($bmpF.Height)"
  
